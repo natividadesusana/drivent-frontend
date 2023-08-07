@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { NoEnrollmentMsg } from '../../../components/Tickets/NoEnrollmentMsg';
 import { TicketSelection } from '../../../components/Tickets/TicketSelection';
 import { getEnrollment, verifyIfUserHasTicket } from '../../../services/ticketApi';
+import PaymentForm from '../../../components/Payment';
 
 export default function Payment() {
   const [enrollment, setEnrollment] = useState(null);
@@ -31,13 +32,13 @@ export default function Payment() {
   if (enrollment === null || userTicket === null) {
     return <Container>Carregando...</Container>;
   }
-  
+
   return (
     <Container>
       <h1>Ingresso e pagamento</h1>
       {enrollment ? 
         ( userTicket === false ? <TicketSelection setUserTicket={setUserTicket}/> 
-          : 'Trocar pelo Payment') 
+          : <PaymentForm userTicket={userTicket} />) 
         : <NoEnrollmentMsg /> }
     </Container>
   );

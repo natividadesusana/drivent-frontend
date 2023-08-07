@@ -81,7 +81,7 @@ export default function PersonalInformationForm() {
       addressDetail: '',
     },
   });
-
+  
   useEffect(() => {
     if (enrollment) {
       setData({
@@ -99,7 +99,7 @@ export default function PersonalInformationForm() {
       });
     }
   }, [enrollment]);
-
+  
   function isValidCep(cep) {
     return cep.length === 8;
   }
