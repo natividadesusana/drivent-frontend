@@ -9,3 +9,16 @@ export async function payment(body, token) {
 
   return response.data;
 }
+
+export async function getTicketPayment(ticketId, token) {
+  const response = await api.get('/payments/', {
+    params: {
+      ticketId
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+}

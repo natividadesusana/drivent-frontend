@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 
-export default function TicketType() {
+export default function TicketType(props) {
   return(
     <ContainerTicket> 
-      <p>Presencial + Com Hotel</p>
-      <p className='price'>R$ 600</p>
+      <p> 
+        {props.userTicket.TicketType.isRemote ? 
+          'Online' : 
+          props.userTicket.TicketType.includesHotel ? 'Presencial + Com Hotel' : 'Presencial + Sem Hotel'} 
+      </p>
+      <p className='price'>R$ {props.userTicket.TicketType.price}</p>
     </ContainerTicket>
   );
 }

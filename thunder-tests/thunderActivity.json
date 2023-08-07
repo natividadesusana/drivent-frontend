@@ -1,0 +1,26 @@
+[
+    {
+        "_id": "f344624d-5de4-48b0-810a-242391cf4505",
+        "colId": "history",
+        "containerId": "",
+        "name": "http://localhost:4000/enrollments",
+        "url": "http://localhost:4000/enrollments",
+        "method": "POST",
+        "sortNum": 0,
+        "created": "2023-08-02T16:14:11.009Z",
+        "modified": "2023-08-02T16:17:34.133Z",
+        "headers": [
+            {
+                "name": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY5MDk5MDQ1OH0.7uCR7Q0r_y2KkpJT58ncTz0fY1tmK4qqQXeVsMhmChY"
+            }
+        ],
+        "params": [],
+        "body": {
+            "type": "json",
+            "raw": "{\n  \"name\": \"Jorge de Augusto\",\n  \"cpf\": \"05899903147\",\n  \"birthday\": \"1992-08-12T03:00:00.000Z\",\n  \"address\": {\n    \"addressDetail\": \"Casa do jorginho\",\n    \"cep\": \"80310-420\",\n    \"city\": \"Curitiba\",\n    \"neighborhood\": \"Santa Quitéria\",\n    \"number\": \"1234\",\n    \"state\": \"PR\",\n    \"street\": \"Rua João Alencar Guimarães\"\n  },\n  \"phone\": \"(66) 99999-9999\"\n}",
+            "form": []
+        },
+        "tests": []
+    }
+]

@@ -54,3 +54,4 @@ Please notice that every ENV that should be available on browser should start wi
 - Add them to your local `.env` file
 - Add them to your docker-compose.yml file (just the name, not the value). Only envs listed in the environment section will be exposed to your docker container.
 - Add them (prod version) to your github repo secrets. They will be used to generate the `.env` file on deploy.
+# drivent-frontend

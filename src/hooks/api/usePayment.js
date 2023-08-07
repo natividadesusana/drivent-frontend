@@ -7,14 +7,14 @@ export default function usePayment() {
   const token = useToken();
 
   const {
-    loading: savePaymentLoading,
-    error: savePaymentError,
-    act: savePayment
-  } = useAsync((data) => paymentApi.payment(data, token), false);
+    loading: getPaymentLoading,
+    error: getPaymentError,
+    act: getPayment
+  } = useAsync((tiketId) => paymentApi.getTicketPayment(tiketId, token), false);
 
   return {
-    savePaymentLoading,
-    savePaymentError,
-    savePayment
+    getPaymentLoading,
+    getPaymentError,
+    getPayment
   };
 }
