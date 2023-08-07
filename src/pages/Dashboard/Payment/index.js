@@ -24,12 +24,15 @@ export default function Payment() {
   async function verifyUserTicket(token) {
     try {
       const userTicket = await verifyIfUserHasTicket(token);
-      setUserTicket(userTicket);
+      if (userTicket) {
+        return setUserTicket(userTicket);
+      }
+      setUserTicket(false);
     } catch (err) {
       setUserTicket(false);
     }
   }
-  if (enrollment === null || userTicket === null) {
+  if (enrollment === null ) {
     return <Container>Carregando...</Container>;
   }
 
