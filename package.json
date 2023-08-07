@@ -22,18 +22,20 @@
     "react-input-mask": "^2.0.4",
     "react-loader-spinner": "^4.0.0",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^5.0.1",
     "react-toastify": "^7.0.4",
     "react-useinterval": "^1.0.2",
     "styled-components": "^5.3.0",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts  start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
+    "lint-fix": "npm run lint -- --fix"
   },
   "eslintConfig": {
     "extends": [
