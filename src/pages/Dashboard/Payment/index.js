@@ -7,7 +7,7 @@ import PaymentForm from '../../../components/Payment';
 
 export default function Payment() {
   const [enrollment, setEnrollment] = useState(null);
-  const [userTicket, setUserTicket] = useState(null);
+  const [userTicket, setUserTicket] = useState(false);
   const infoJSON = localStorage.getItem('userData');
   const userData = JSON.parse(infoJSON);
   const token = userData.token;
@@ -23,9 +23,9 @@ export default function Payment() {
   }, []);
   async function verifyUserTicket(token) {
     try {
-      const userTicket = await verifyIfUserHasTicket(token);
-      if (userTicket) {
-        return setUserTicket(userTicket);
+      const ticket = await verifyIfUserHasTicket(token);
+      if (ticket) {
+        return setUserTicket(ticket);
       }
       setUserTicket(false);
     } catch (err) {
