@@ -33,7 +33,7 @@ export default function PaymentForm(props) {
 
   useEffect(() => {
     if (form.cardnumber !== '') {
-      const numbers = form.cardnumber.split(',');
+      const numbers = form.cardnumber.split(' ');
       if (numbers.length < 5 && numbers.length > 0) {
         const number = [];
         for (let i = 0; i < 4; i++) {
