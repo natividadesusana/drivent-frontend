@@ -12,7 +12,7 @@ export default function ActivityCard({ id, name, startsAt, endsAt, vacancy, Acti
   const { postactivity } = usePostActivity();
   const { getactivitybyuserid } = useGetActivityByUser();
   const { activityunsubscribe } = useActivityUnsubscribe();
-
+  
   useEffect(() => {
     if (selectedActivity && !hasSelected) {
       postactivity({ activityId: id })
@@ -55,12 +55,12 @@ export default function ActivityCard({ id, name, startsAt, endsAt, vacancy, Acti
     const startMinute = Number(startsAt.slice(3, 5));
     const endHour = Number(endsAt.slice(0, 2));
     const endMinute = Number(endsAt.slice(3, 5));
-  
+
     const totalMinutes = (endHour - startHour) * 60 + (endMinute - startMinute);
     const totalHours = totalMinutes / 60;
-  
+
     return totalHours * 80 + (Math.ceil(totalHours) - 1) * 10 + 'px';
-  }  
+  }
 
   return (
     <Content
