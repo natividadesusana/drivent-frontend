@@ -28,7 +28,7 @@ export default function ActivitiesSelection() {
       setDateData(data);
     });
   }, []);
-  
+
   useEffect(() => {
     if (selectedDay) {
       getactivityofday(selectedDay).then((res) => {

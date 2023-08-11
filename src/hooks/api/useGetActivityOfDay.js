@@ -1,4 +1,4 @@
-import useAsync from '../useAsync';
+import useAsync from './useAsyncActivities';
 import useToken from '../useToken';
 
 import * as activitiesApi from '../../services/activitiesApi';

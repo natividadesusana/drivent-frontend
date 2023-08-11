@@ -8,29 +8,29 @@ import useToken from '../../../hooks/useToken';
 export default function Hotel() {
   const { ticket } = useTicket();
   const [listHotels, setListHotels] = useState([]);
-  const [chosenHotel, setchosenHotel] = useState(undefined);
+  const [chosenHotel, setChosenHotel] = useState(undefined);
   const [chosenRoom, setChosenRoom] = useState(undefined);
   const [listRooms, setListRooms] = useState([]);
-  const [capacity, setCapacity] = useState(0);
+  const [capacity] = useState(0);
   const { token } = useToken();
+
   const config = {
-    headers:
-      { Authorization: `Bearer ${token}` }
+    headers: { Authorization: `Bearer ${token}` },
   };
-  console.log(ticket);
+
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_BASE_URL}/hotels`, config)
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/hotels`, config)
       .then((res) => {
-        console.log(res.data);
         setListHotels(res.data);
       })
       .catch((err) => console.log(err.message));
   }, []);
   function selectedHotel(id) {
-    setchosenHotel(id);
-    axios.get(`${process.env.REACT_APP_API_BASE_URL}/hotels/${id}`, config)
+    setChosenHotel(id);
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/hotels/${id}`, config)
       .then((res) => {
-        console.log(res.data);
         setListRooms(res.data.Rooms);
       })
       .catch((err) => console.log(err.message));
@@ -77,53 +77,34 @@ export default function Hotel() {
             selectedHotel={selectedHotel}
             chosenHotel={chosenHotel}
             capacity={capacity}
-          />))}
+          />
+        ))}
       </HotelList>
       <ContainerReserve>
         <RoomList>
           {listRooms.map((r, i) => (
-            <Room
-              onClick={() => selectedRoom(r.id)}
-              key={i}
-              chosenRoom={chosenRoom}
-              id={r.id}>
+            <Room onClick={() => selectedRoom(r.id)} key={i} chosenRoom={chosenRoom} id={r.id}>
               <p>{r.name}</p>
-              <div>
-                {r.capacity === 1 ? <SinglePerson /> : (r.capacity === 2 ? <DoublePerson /> : <TriplePerson />)}
-              </div>
+              <div>{r.capacity === 1 ? <SinglePerson /> : r.capacity === 2 ? <DoublePerson /> : <TriplePerson />}</div>
             </Room>
           ))}
         </RoomList>
 
         {chosenRoom && <button>Reservar Quarto</button>}
       </ContainerReserve>
-    </HotelContainer >
+    </HotelContainer>
   );
-};
+}
 
 function SinglePerson() {
-  return (
-    <PersonOutline
-      color={'#00000'}
-      height="20px"
-      width="20px"
-    />
-  );
+  return <PersonOutline color={'#00000'} height="20px" width="20px" />;
 }
 
 function DoublePerson() {
   return (
     <>
-      <PersonOutline
-        color={'#00000'}
-        height="20px"
-        width="20px"
-      />
-      <PersonOutline
-        color={'#00000'}
-        height="20px"
-        width="20px"
-      />
+      <PersonOutline color={'#00000'} height="20px" width="20px" />
+      <PersonOutline color={'#00000'} height="20px" width="20px" />
     </>
   );
 }
@@ -131,31 +112,16 @@ function DoublePerson() {
 function TriplePerson() {
   return (
     <>
-      <PersonOutline
-        color={'#00000'}
-        height="20px"
-        width="20px"
-      />
-      <PersonOutline
-        color={'#00000'}
-        height="20px"
-        width="20px"
-      />
-      <PersonOutline
-        color={'#00000'}
-        height="20px"
-        width="20px"
-      />
+      <PersonOutline color={'#00000'} height="20px" width="20px" />
+      <PersonOutline color={'#00000'} height="20px" width="20px" />
+      <PersonOutline color={'#00000'} height="20px" width="20px" />
     </>
   );
 }
 
 function BoxHotel({ name, image, id, selectedHotel, chosenHotel, capacity, Rooms }) {
   return (
-    <HotelBox
-      onClick={() => selectedHotel(id)}
-      chosenHotel={chosenHotel}
-      id={id}>
+    <HotelBox onClick={() => selectedHotel(id)} chosenHotel={chosenHotel} id={id}>
       <img src={image} alt={name}></img>
       <h1>{name}</h1>
       <h2>Tipos de acomodação:</h2>
@@ -167,99 +133,96 @@ function BoxHotel({ name, image, id, selectedHotel, chosenHotel, capacity, Rooms
 }
 
 const HotelContainer = styled.div`
-display:flex;
-flex-direction: column;
-width: 100%;
-height: 100%;
-
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 `;
 
 const HotelBox = styled.div`
-display: flex;
-flex-direction: column;
-width: 200px;
-height: 300px;
-background-color: ${p => p.chosenHotel === p.id ? 'lightyellow' : '#ececec'};
-margin-right: 15px;
-margin-bottom: 50px;
-border-radius: 10px;
-align-items: flex-start;
-padding: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  height: 300px;
+  background-color: ${(p) => (p.chosenHotel === p.id ? 'lightyellow' : '#ececec')};
+  margin-right: 15px;
+  margin-bottom: 50px;
+  border-radius: 10px;
+  align-items: flex-start;
+  padding: 10px;
 
-img {
-width: 100%;
-height: 40%;
-}
+  img {
+    width: 100%;
+    height: 40%;
+  }
 
-h1 {
-font - size: 19px;
-margin-top: 15px;
-margin-bottom: 15px;
-}
+  h1 {
+    font-size: 19px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
 
-h2 {
-font - size: 14px;
-margin-bottom: 5px;
+  h2 {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
 
-}
-
-p {
-font - size: 11px;
-margin-bottom: 15px;
-}
+  p {
+    font-size: 11px;
+    margin-bottom: 15px;
+  }
 `;
 
 const TitleContainer = styled.h1`
-font-size: 20px;
-margin-bottom: 20px;
+  font-size: 20px;
+  margin-bottom: 20px;
 `;
 
 const SubtitleContainer = styled.p`
-font-size: 15px;
-margin-bottom: 20px;
+  font-size: 15px;
+  margin-bottom: 20px;
 `;
 
 const HotelList = styled.div`
-display: flex;
-width: auto;
-height: auto;
-padding: 5px;
-background: white;
+  display: flex;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  background: white;
 `;
 
 const RoomList = styled.div`
-display: flex;
-flex-wrap: wrap;
-width: 100%;
-height: auto;
-margin-bottom: 100px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: auto;
+  margin-bottom: 100px;
 `;
 
 const Room = styled.div`
-display: flex;
-align-items: center;
-widht: 250px;
-height: 30px;
-background-color: ${p => p.chosenRoom === p.id ? 'lightyellow' : 'white'};
-margin-right: 10px;
-margin-bottom: 5px;
-padding: 5px;
-border-radius: 5px;
-border: solid 1px black;
+  display: flex;
+  align-items: center;
+  width: 250px;
+  height: 30px;
+  background-color: ${(p) => (p.chosenRoom === p.id ? 'lightyellow' : 'white')};
+  margin-right: 10px;
+  margin-bottom: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  border: solid 1px black;
 
-p {
-font-size: 15px;
-}
+  p {
+    font-size: 15px;
+  }
 `;
 
 const ContainerReserve = styled.div`
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-button {
-widht: 50px;
-height: 50px;
-background: #ececec;
-}
+  button {
+    width: 50px;
+    height: 50px;
+    background: #ececec;
+  }
 `;
-

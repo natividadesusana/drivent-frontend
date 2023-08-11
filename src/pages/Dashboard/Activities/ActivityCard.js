@@ -44,27 +44,28 @@ export default function ActivityCard({ id, name, startsAt, endsAt, vacancy, Acti
   }, [id]);
 
   function formatTime(time) {
-    return new Date(time).toLocaleTimeString('pt-BR', {
+    const options = {
       hour: '2-digit',
       minute: '2-digit',
-    });
+      timeZone: 'America/Sao_Paulo',
+    };
+    return new Date(time).toLocaleTimeString('pt-BR', options);
   }
 
-  function calculateHeigth() {
-    const startHour = Number(startsAt.slice(0, 2));
-    const startMinute = Number(startsAt.slice(3, 5));
-    const endHour = Number(endsAt.slice(0, 2));
-    const endMinute = Number(endsAt.slice(3, 5));
-  
+  function calculateHeight() {
+    const startHour = Number(formatTime(startsAt).slice(0, 2));
+    const startMinute = Number(formatTime(startsAt).slice(3, 5));
+    const endHour = Number(formatTime(endsAt).slice(0, 2));
+    const endMinute = Number(formatTime(endsAt).slice(3, 5));
     const totalMinutes = (endHour - startHour) * 60 + (endMinute - startMinute);
     const totalHours = totalMinutes / 60;
-  
-    return totalHours * 80 + (Math.ceil(totalHours) - 1) * 10 + 'px';
-  }  
+    const totalHeight = totalHours * 80;
+    return totalHeight;
+  }
 
   return (
     <Content
-      h={calculateHeigth()}
+      h={calculateHeight()}
       color={hasSelected.toString()}
       onClick={() => {
         if (vacancy > ActivitySubscription.length) {
@@ -103,7 +104,7 @@ export default function ActivityCard({ id, name, startsAt, endsAt, vacancy, Acti
 const Content = styled.div`
   display: flex;
   width: calc(100% - 20px);
-  height: ${(props) => props.h};
+  height: ${(props) => props.h}px;
   margin: 0 10px 10px 10px;
   padding: 10px 0 10px 10px;
   background-color: ${(props) => (props.color === 'true' ? '#D0FFDB' : '#F1F1F1')};
