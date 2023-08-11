@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { PersonOutline } from 'react-ionicons';
+import { IoPersonOutline } from 'react-icons/io5';
 import useTicket from '../../../hooks/api/useTicket';
 import useToken from '../../../hooks/useToken';
 
@@ -12,13 +12,14 @@ export default function Hotel() {
   const [chosenRoom, setChosenRoom] = useState(undefined);
   const [listRooms, setListRooms] = useState([]);
   const [capacity] = useState(0);
-  const { token } = useToken();
+  const token = useToken();
 
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
 
   useEffect(() => {
+    console.log(config);
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/hotels`, config)
       .then((res) => {
@@ -97,14 +98,14 @@ export default function Hotel() {
 }
 
 function SinglePerson() {
-  return <PersonOutline color={'#00000'} height="20px" width="20px" />;
+  return <IoPersonOutline color={'#00000'} height="20px" width="20px" />;
 }
 
 function DoublePerson() {
   return (
     <>
-      <PersonOutline color={'#00000'} height="20px" width="20px" />
-      <PersonOutline color={'#00000'} height="20px" width="20px" />
+      <IoPersonOutline color={'#00000'} height="20px" width="20px" />
+      <IoPersonOutline color={'#00000'} height="20px" width="20px" />
     </>
   );
 }
@@ -112,9 +113,9 @@ function DoublePerson() {
 function TriplePerson() {
   return (
     <>
-      <PersonOutline color={'#00000'} height="20px" width="20px" />
-      <PersonOutline color={'#00000'} height="20px" width="20px" />
-      <PersonOutline color={'#00000'} height="20px" width="20px" />
+      <IoPersonOutline color={'#00000'} height="20px" width="20px" />
+      <IoPersonOutline color={'#00000'} height="20px" width="20px" />
+      <IoPersonOutline color={'#00000'} height="20px" width="20px" />
     </>
   );
 }
