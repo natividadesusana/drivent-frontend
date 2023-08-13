@@ -1,43 +1,116 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { IoPersonOutline } from 'react-icons/io5';
+import { IoPersonSharp } from 'react-icons/io5';
 import useTicket from '../../../hooks/api/useTicket';
 import useToken from '../../../hooks/useToken';
+import BoxHotel from './BoxHotel';
+import { acomodacao, capacidade, createIcons } from './functions';
+import RoomBox from './RoomBox';
+import RoomReserved from './RoomReserved';
+import { ContainerReserve, HotelBox, HotelContainer, HotelList, Room, RoomCrowded, RoomList, SubtitleContainer, TitleContainer } from './styled';
 
 export default function Hotel() {
   const { ticket } = useTicket();
-  const [listHotels, setListHotels] = useState([]);
-  const [chosenHotel, setChosenHotel] = useState(undefined);
-  const [chosenRoom, setChosenRoom] = useState(undefined);
-  const [listRooms, setListRooms] = useState([]);
-  const [capacity] = useState(0);
+  const [listHotels, setListHotels] = useState([]); //lista de hoteis
+  const [chosenHotel, setchosenHotel] = useState(undefined); //ID hotel selecionado
+  const [chosenRoom, setChosenRoom] = useState(undefined); //ID quarto selecionado
+  const [listRooms, setListRooms] = useState([]); //lista de quartos
+  const [bookingId, setBookingId] = useState(undefined); //id da reserva
+  const [put, setPut] = useState(false); //ativa o modo de troca de quarto
+  const [booking, setBooking] = useState(false); //ativa a tela de quarto reservado
+  const [infoRoom, setInfoRoom] = useState({}); // informações do quarto reservado
+  const [infoHotel, setInfoHotel] = useState({}); // informações do hotel escolhido
   const token = useToken();
-
   const config = {
-    headers: { Authorization: `Bearer ${token}` },
+    headers:
+      { Authorization: `Bearer ${token}` }
   };
-
   useEffect(() => {
-    console.log(config);
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/hotels`, config)
+    axios.get(`${process.env.REACT_APP_API_BASE_URL}/booking`, config)
       .then((res) => {
-        setListHotels(res.data);
+        setBookingId(res.data.id);
+        setInfoRoom(res.data.Room);
+        setBooking(true);
+        setInfoHotel(res.data.Room.Hotel);
       })
+      .catch((err) => {
+        if (err.response.status === 404) {
+          setPut(false);
+          console.log('usuário não tem quarto reservado');
+        }
+      });
+
+    axios.get(`${process.env.REACT_APP_API_BASE_URL}/hotels`, config)
+      .then((res) => setListHotels(res.data))
       .catch((err) => console.log(err.message));
   }, []);
-  function selectedHotel(id) {
-    setChosenHotel(id);
-    axios
-      .get(`${process.env.REACT_APP_API_BASE_URL}/hotels/${id}`, config)
-      .then((res) => {
-        setListRooms(res.data.Rooms);
-      })
+  function selectedHotel(hotel) {
+    setchosenHotel(hotel.id);
+    setInfoHotel(hotel);
+    setChosenRoom(undefined);
+    axios.get(`${process.env.REACT_APP_API_BASE_URL}/hotels/${hotel.id}`, config)
+      .then((res) => setListRooms(res.data.Rooms))
       .catch((err) => console.log(err.message));
   }
-  function selectedRoom(id) {
-    setChosenRoom(id);
+  function selectedRoom(room) {
+    setChosenRoom(room.id);
+    setInfoRoom(room);
+  }
+
+  function reserveRoom(id) {
+    const body = { roomId: id };
+
+    try {
+      if (put === false) {
+        axios.post(`${process.env.REACT_APP_API_BASE_URL}/booking`, body, config)
+          .then((res) => {
+            setBookingId(res.data.bookingId);
+            setBooking(true);
+            axios.get(`${process.env.REACT_APP_API_BASE_URL}/booking`, config)
+              .then((res) => setInfoRoom(res.data.Room));
+          });
+      } else if (put === true) {
+        axios.put(`${process.env.REACT_APP_API_BASE_URL}/booking/${bookingId}`, body, config)
+          .then((res) => {
+            setBookingId(res.data.bookingId);
+            setBooking(true);
+            axios.get(`${process.env.REACT_APP_API_BASE_URL}/booking`, config)
+              .then((res) => setInfoRoom(res.data.Room));
+          });
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  function changeRoom() {
+    setPut(true);
+    setBooking(false);
+    setchosenHotel(undefined);
+    setChosenRoom(undefined);
+    setListRooms([]);
+    axios.get(`${process.env.REACT_APP_API_BASE_URL}/hotels`, config)
+      .then((res) => setListHotels(res.data))
+      .catch((err) => console.log(err.message));
+  }
+
+  if (booking === true) {
+    return (
+      <>
+        <HotelContainer>
+          <TitleContainer>Escolha de hotel e quarto</TitleContainer>
+          <h3>Você já escolheu seu quarto</h3>
+          <HotelBox>
+            <RoomReserved
+              infoHotel={infoHotel}
+              infoRoom={infoRoom}
+            />
+          </HotelBox>
+
+          <button onClick={() => changeRoom()}>TROCAR DE QUARTO</button>
+        </HotelContainer>
+      </>
+    );
   }
 
   if (!ticket || ticket.status === 'RESERVED') {
@@ -45,7 +118,7 @@ export default function Hotel() {
       <>
         <HotelContainer>
           <TitleContainer>Escolha de hotel e quarto</TitleContainer>
-          <p>Você precisa ter confirmado o pagamento antes de fazer a escolha de hospedagem</p>
+          <h3>Você precisa ter confirmado o pagamento antes de fazer a escolha de hospedagem</h3>
         </HotelContainer>
       </>
     );
@@ -56,8 +129,8 @@ export default function Hotel() {
       <>
         <HotelContainer>
           <TitleContainer>Escolha de hotel e quarto</TitleContainer>
-          <p>Sua modalidade de ingresso não inclui hospedagem</p>
-          <p>Prossiga para a escolha de atividades</p>
+          <h3>Sua modalidade de ingresso não inclui hospedagem</h3>
+          <h3>Prossiga para a escolha de atividades</h3>
         </HotelContainer>
       </>
     );
@@ -70,160 +143,62 @@ export default function Hotel() {
       <HotelList>
         {listHotels.map((h, i) => (
           <BoxHotel
-            Rooms={h.Rooms}
             name={h.name}
             image={h.image}
             id={h.id}
             key={i}
             selectedHotel={selectedHotel}
             chosenHotel={chosenHotel}
-            capacity={capacity}
-          />
-        ))}
+            hotel={h}
+            rooms={h.Rooms}
+            capacidade={capacidade}
+            acomodacao={acomodacao}
+          />))}
       </HotelList>
       <ContainerReserve>
+        {(chosenHotel !== undefined) && <h1>Ótima pedida! Agora escolha o quarto</h1>}
         <RoomList>
           {listRooms.map((r, i) => (
-            <Room onClick={() => selectedRoom(r.id)} key={i} chosenRoom={chosenRoom} id={r.id}>
-              <p>{r.name}</p>
-              <div>{r.capacity === 1 ? <SinglePerson /> : r.capacity === 2 ? <DoublePerson /> : <TriplePerson />}</div>
-            </Room>
+            (r.capacity > r.Booking.length) ?
+              <Room
+                onClick={() => selectedRoom(r)}
+                key={i}
+                chosenRoom={chosenRoom}
+                id={r.id}>
+                <RoomBox
+                  name={r.name}
+                  createIcons={createIcons}
+                  id={r.id}
+                  r={r}
+                  chosenRoom={chosenRoom}
+                />
+              </Room> : <RoomCrowded
+                key={i}
+                chosenRoom={chosenRoom}
+                id={r.id}>
+                <p>{r.name}</p>
+                <div>
+                  {r.Booking.map((h, i) => <Person
+                    key={i}
+                    chosenRoom={chosenRoom}
+                    id={r.id} />)}
+                </div>
+              </RoomCrowded>
           ))}
         </RoomList>
 
-        {chosenRoom && <button>Reservar Quarto</button>}
+        {chosenRoom && <button onClick={() => reserveRoom(chosenRoom)}>RESERVAR QUARTO</button>}
       </ContainerReserve>
-    </HotelContainer>
+    </HotelContainer >
   );
-}
+};
 
-function SinglePerson() {
-  return <IoPersonOutline color={'#00000'} height="20px" width="20px" />;
-}
-
-function DoublePerson() {
+function Person({ chosenRoom, id }) {
   return (
-    <>
-      <IoPersonOutline color={'#00000'} height="20px" width="20px" />
-      <IoPersonOutline color={'#00000'} height="20px" width="20px" />
-    </>
+    <IoPersonSharp
+      color={(chosenRoom === id) ? '#fc03ca' : '#00000'}
+      height="25px"
+      width="25px"
+    />
   );
 }
-
-function TriplePerson() {
-  return (
-    <>
-      <IoPersonOutline color={'#00000'} height="20px" width="20px" />
-      <IoPersonOutline color={'#00000'} height="20px" width="20px" />
-      <IoPersonOutline color={'#00000'} height="20px" width="20px" />
-    </>
-  );
-}
-
-function BoxHotel({ name, image, id, selectedHotel, chosenHotel, capacity, Rooms }) {
-  return (
-    <HotelBox onClick={() => selectedHotel(id)} chosenHotel={chosenHotel} id={id}>
-      <img src={image} alt={name}></img>
-      <h1>{name}</h1>
-      <h2>Tipos de acomodação:</h2>
-      <p>Single, Double, Triple</p>
-      <h2>Vagas disponíveis:</h2>
-      <p>{capacity}</p>
-    </HotelBox>
-  );
-}
-
-const HotelContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-`;
-
-const HotelBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 200px;
-  height: 300px;
-  background-color: ${(p) => (p.chosenHotel === p.id ? 'lightyellow' : '#ececec')};
-  margin-right: 15px;
-  margin-bottom: 50px;
-  border-radius: 10px;
-  align-items: flex-start;
-  padding: 10px;
-
-  img {
-    width: 100%;
-    height: 40%;
-  }
-
-  h1 {
-    font-size: 19px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-  }
-
-  h2 {
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-
-  p {
-    font-size: 11px;
-    margin-bottom: 15px;
-  }
-`;
-
-const TitleContainer = styled.h1`
-  font-size: 20px;
-  margin-bottom: 20px;
-`;
-
-const SubtitleContainer = styled.p`
-  font-size: 15px;
-  margin-bottom: 20px;
-`;
-
-const HotelList = styled.div`
-  display: flex;
-  width: auto;
-  height: auto;
-  padding: 5px;
-  background: white;
-`;
-
-const RoomList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  height: auto;
-  margin-bottom: 100px;
-`;
-
-const Room = styled.div`
-  display: flex;
-  align-items: center;
-  width: 250px;
-  height: 30px;
-  background-color: ${(p) => (p.chosenRoom === p.id ? 'lightyellow' : 'white')};
-  margin-right: 10px;
-  margin-bottom: 5px;
-  padding: 5px;
-  border-radius: 5px;
-  border: solid 1px black;
-
-  p {
-    font-size: 15px;
-  }
-`;
-
-const ContainerReserve = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  button {
-    width: 50px;
-    height: 50px;
-    background: #ececec;
-  }
-`;
