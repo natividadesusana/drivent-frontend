@@ -19,7 +19,6 @@ export default function Hotel() {
   };
 
   useEffect(() => {
-    console.log(config);
     axios
       .get(`${process.env.REACT_APP_API_BASE_URL}/hotels`, config)
       .then((res) => {
