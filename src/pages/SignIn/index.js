@@ -107,4 +107,5 @@ const ButtonGit = styled.button`
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 500;
   font-size: 0.875rem;
+  cursor: pointer;
 `;

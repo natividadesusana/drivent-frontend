@@ -25,6 +25,7 @@ export default function Hotel() {
     headers:
       { Authorization: `Bearer ${token}` }
   };
+  //console.log(listHotels);
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_BASE_URL}/booking`, config)
       .then((res) => {
@@ -41,7 +42,11 @@ export default function Hotel() {
       });
 
     axios.get(`${process.env.REACT_APP_API_BASE_URL}/hotels`, config)
-      .then((res) => setListHotels(res.data))
+      .then((res) =>  {
+        console.log(res.data);
+        setListHotels(res.data);
+      })
+
       .catch((err) => console.log(err.message));
   }, []);
   function selectedHotel(hotel) {
@@ -135,13 +140,13 @@ export default function Hotel() {
       </>
     );
   }
-
+  
   return (
     <HotelContainer>
       <TitleContainer>Escolha de hotel e quarto</TitleContainer>
       <SubtitleContainer>Primeiro, escolha seu hotel</SubtitleContainer>
       <HotelList>
-        {listHotels.map((h, i) => (
+        {listHotels.length > 0 ? listHotels.map((h, i) => (
           <BoxHotel
             name={h.name}
             image={h.image}
@@ -153,12 +158,12 @@ export default function Hotel() {
             rooms={h.Rooms}
             capacidade={capacidade}
             acomodacao={acomodacao}
-          />))}
+          />)) : 'Carregando'}
       </HotelList>
       <ContainerReserve>
         {(chosenHotel !== undefined) && <h1>Ótima pedida! Agora escolha o quarto</h1>}
         <RoomList>
-          {listRooms.map((r, i) => (
+          {listRooms.length > 0 ? listRooms.map((r, i) => (
             (r.capacity > r.Booking.length) ?
               <Room
                 onClick={() => selectedRoom(r)}
@@ -184,7 +189,7 @@ export default function Hotel() {
                     id={r.id} />)}
                 </div>
               </RoomCrowded>
-          ))}
+          )) : ''}
         </RoomList>
 
         {chosenRoom && <button onClick={() => reserveRoom(chosenRoom)}>RESERVAR QUARTO</button>}
