@@ -6,6 +6,7 @@ export const HotelContainer = styled.div`
     width: auto;
     height: auto;
     overflow-x: scroll;
+    
 
     button {
         width: 200px;
@@ -17,6 +18,7 @@ export const HotelContainer = styled.div`
         margin-bottom: 50px;
         background-color: lightgray;
         font-family: 'Roboto';
+        cursor: pointer;
     }
 
     h3 {
@@ -37,7 +39,7 @@ export const HotelBox = styled.div`
     border-radius: 10px;
     align-items: flex-start;
     padding: 10px;
-
+    cursor: pointer;
     img {
         width: 100%;
         height: 100px;
@@ -99,7 +101,7 @@ export const Room = styled.div`
     padding: 5px;
     border-radius: 5px;
     border: solid 1px black;
-
+    cursor: pointer;
     p {
         font-size: 15px;
     }
