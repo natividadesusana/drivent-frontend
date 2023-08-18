@@ -1,13 +1,14 @@
 import { useState, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import drivent from '../../assets/images/drivent.png';
 
 import AuthLayout from '../../layouts/Auth';
 
 import Input from '../../components/Form/Input';
 import Button from '../../components/Form/Button';
 import Link from '../../components/Link';
-import { Row, Title, Label } from '../../components/Auth';
+import { Row, Label } from '../../components/Auth';
 
 import EventInfoContext from '../../contexts/EventInfoContext';
 import UserContext from '../../contexts/UserContext';
@@ -26,7 +27,7 @@ export default function SignIn() {
   const { setUserData } = useContext(UserContext);
 
   const navigate = useNavigate();
-  
+
   async function submit(event) {
     event.preventDefault();
 
@@ -38,7 +39,7 @@ export default function SignIn() {
     } catch (err) {
       toast('Não foi possível fazer o login!');
     }
-  } 
+  }
 
   async function submitLoginGit() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -61,9 +62,9 @@ export default function SignIn() {
       response_type: 'code',
       scope: 'user',
       client_id: CLIENT_ID,
-      redirect_uri: 'http://localhost:3000/sign-in'
+      redirect_uri: 'http://localhost:3000/sign-in',
     });
-  
+
     const authURL = `${GITHUB_URL}?${params.toString()}`;
     window.location.href = authURL;
   }
@@ -75,15 +76,23 @@ export default function SignIn() {
   return (
     <AuthLayout background={eventInfo.backgroundImageUrl}>
       <Row>
-        <img src={eventInfo.logoImageUrl} alt="Event Logo" width="60px" />
-        <Title>{eventInfo.title}</Title>
+        <img src={drivent} alt="Event Logo" width="200px" style={{ marginTop: '40px' }} />
+        {/* <Title>{eventInfo.title}</Title> */}
       </Row>
       <Row>
-        <Label>Entrar</Label>
+        <Label style={{ marginTop: '-40px' }}>Entrar</Label>
         <form onSubmit={submit}>
-          <Input label="E-mail" type="text" fullWidth value={email} onChange={e => setEmail(e.target.value)} />
-          <Input label="Senha" type="password" fullWidth value={password} onChange={e => setPassword(e.target.value)} />
-          <Button type="submit" color="primary" fullWidth disabled={loadingSignIn}>Entrar</Button>
+          <Input label="E-mail" type="text" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input
+            label="Senha"
+            type="password"
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button type="submit" color="primary" fullWidth disabled={loadingSignIn}>
+            Entrar
+          </Button>
         </form>
         <ButtonGit onClick={redirectToGitHub}>Login com GitHub</ButtonGit>
       </Row>
@@ -103,8 +112,9 @@ const ButtonGit = styled.button`
   margin-top: 8px !important;
   border-radius: 4px;
   padding: 6px 16px;
-  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-weight: 500;
   font-size: 0.875rem;
   cursor: pointer;
