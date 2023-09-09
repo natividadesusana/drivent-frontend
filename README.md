@@ -1,12 +1,30 @@
-# drivent-front
+# Driven.t
 
-Front-end for Driven.t, an event management solution.
+<img width="800" alt="Captura de Tela 2023-09-09 às 00 35 36" src="https://github.com/natividadesusana/drivent-frontend/assets/95102911/e3bb4593-d756-4571-ab73-5de3b7878f3a">
+<img width="800" alt="Captura de Tela 2023-09-09 às 00 42 57" src="https://github.com/natividadesusana/drivent-frontend/assets/95102911/13dd7836-08f6-4764-818f-31a4136c013a">
+<img width="800" alt="Captura de Tela 2023-09-09 às 00 43 34" src="https://github.com/natividadesusana/drivent-frontend/assets/95102911/245a36a6-8896-4bab-a360-79fbdd731503">
+<img width="800" alt="Captura de Tela 2023-09-09 às 00 44 13" src="https://github.com/natividadesusana/drivent-frontend/assets/95102911/ab52f288-c3cd-4969-b874-8d4b6013d1e5">
+<img width="800" alt="Captura de Tela 2023-09-09 às 00 44 29" src="https://github.com/natividadesusana/drivent-frontend/assets/95102911/78b8d399-ea2d-487f-b728-917992ee1281">
+<img width="800" alt="Captura de Tela 2023-09-09 às 00 47 35" src="https://github.com/natividadesusana/drivent-frontend/assets/95102911/781d676d-6609-493d-97ab-ba641135ec0f">
+<img width="800" alt="Captura de Tela 2023-09-09 às 00 48 28" src="https://github.com/natividadesusana/drivent-frontend/assets/95102911/df38017b-9a65-4bb2-834c-a65278427458">
 
-## About
+</br></br>
 
-Driven.t is a web browser application with which you can manage every single aspect of your event.
+🔸 **Demo:** https://drivent-frontend-kohl.vercel.app/
 
-## How to run for development
+🔸 **Backend Repository:** https://github.com/yurilopesmdv/drivent-backend/
+
+🔸 **Driven.t Organization:** https://github.com/drivent-ed
+
+<hr/>
+
+## ℹ️ About
+
+The Driven.t project's mission is to create an event management system, focusing on providing a customizable application for each specific event. Using the White Label concept, Driven.t allows customers to have a unique application for each event they want to manage. The system has a timer that releases access on the start date of event registration and offers features such as registration (online or in person), choice of accommodation for in-person events, payment options, selection of activities at the event and the issuance of certificates of participation. The application is a web application and its development can be started by following the configuration and execution instructions in the development environment provided in the project repository.
+
+<hr/>
+
+## ⚙️ How to run for development
 
 1. Clone this repository
 2. Install all dependencies
@@ -23,14 +41,18 @@ npm i
 npm run start
 ```
 
-## Building and starting for production
+<hr/>
+
+## 🛠️ Building and starting for production
 
 ```bash
 npm run build
 npm start
 ```
 
-## Running application locally or inside docker
+<hr/>
+
+## 🚀 Running application locally or inside docker
 
 `.env.development` and `.env.test` must be changed if you and to run the application locally or inside docker. You can populate files based on `.env.example` file, but you need to consider the following:
 
@@ -46,7 +68,9 @@ Set `POSTGRES_HOST` to `drivent-postgres-development` for `.env.development` and
 
 Set `POSTGRES_HOST` to `localhost` for `.env.development` and `localhost` for `.env.test` file. Docker compose is configured to expose postgres container to your localhost.
 
-## What to do when add new ENV VARIABLES
+<hr/>
+
+## 🖇 What to do when add new ENV VARIABLES
 
 Please notice that every ENV that should be available on browser should start with `REACT_APP_` prefix. There are several things you need to do when you add new ENV VARIABLES:
 
@@ -54,4 +78,8 @@ Please notice that every ENV that should be available on browser should start wi
 - Add them to your local `.env` file
 - Add them to your docker-compose.yml file (just the name, not the value). Only envs listed in the environment section will be exposed to your docker container.
 - Add them (prod version) to your github repo secrets. They will be used to generate the `.env` file on deploy.
-# drivent-frontend
+
+<hr/>
+
+## How to Contribute
+Contributions are always welcome! If you find any bugs or have suggestions for new features, feel free to open an issue or pull request.
